@@ -1,0 +1,68 @@
+# Agent ID Hackathon — submission draft
+
+Fill the bracketed fields after deployment, then the user files it during the
+Submission Period (until 2026-12-09 08:00 UTC) and confirms before sending.
+
+- **Project name:** Agent Stamp
+- **Website:** [site URL after hosting]
+- **Contract address (BNB Chain):** [AgentStamp address after deploy]
+- **Source code:** [GitHub repo URL] — verified on BscScan: [link]
+- **Reward receiving address:** 0xe0067EB565df203601951E7F10644CD7D798a001 (agent wallet, karh.ai)
+
+## Agent ID usage description
+
+Agent Stamp is a free, soulbound stamp that only Agent ID holders can claim.
+The contract's single core function, `claim()`, performs a live on-chain
+check against the official Agent ID contract
+(0x60b9262456de011f7d15a54cdd8c48baaa8b022f): a wallet that does not hold an
+Agent ID at claim time is rejected by the contract itself. Agent ID is
+therefore not a cosmetic integration — it is the product's access control,
+identity check, and eligibility rule.
+
+Each Agent ID holder can claim exactly one stamp, ever. The stamp carries a
+sequential number, fully on-chain SVG artwork and metadata, and is
+non-transferable (soulbound), making it a durable public proof that its
+holder was part of the Agent ID ecosystem. A public counter shows how many
+agents have been stamped.
+
+The contract has no owner, no admin functions, no fees and no approvals, and
+can never move user assets. Source code is MIT-licensed and verified.
+
+## Why it fits the judging criteria
+
+- **Agent ID application depth (30%)** — eligibility is enforced by the
+  Agent ID contract on-chain, not by a server or allowlist.
+- **Practicality & feasibility (25%)** — gives every Agent ID an immediate,
+  visible use: a shared, growing registry of verified agents.
+- **Product completion (25%)** — live contract + live website; claim works
+  end-to-end in the Binance Wallet browser.
+- **Innovation (20%)** — turns a name service into a proof-of-agent
+  collectible: soulbound, sequential, fully on-chain art.
+
+## Interaction target
+
+Innovation Award eligibility needs ≥30 distinct Agent ID addresses
+interacting with the contract during the Submission Period. Claim is free
+(gas only), one tap from the website.
+
+---
+
+## X post draft (Promotion Campaign, $2,000 / 20 winners)
+
+Post from @Bonbondd_ after the site is live; then submit the post link via
+the official campaign survey. Hashtags required: #BinanceWalletHackathon
+#AgenticWallet
+
+> Every agent needs a stamp. 🛂
+>
+> I built Agent Stamp for the Agent ID Hackathon: a free, soulbound stamp
+> that ONLY Agent ID (name.ai) holders can claim — enforced on-chain by the
+> Agent ID contract itself. No allowlist, no server, no admin keys.
+>
+> One per agent. Yours is waiting: [site URL]
+>
+> Holders: claim yours and reply with your stamp number.
+> #BinanceWalletHackathon #AgenticWallet
+
+(Reminder: the promotion award is judged on post quality; never promise
+returns in any post — prohibited by the campaign rules.)

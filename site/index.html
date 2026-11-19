@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Stamp — the Agent ID holders' stamp</title>
+<meta name="description" content="A free, soulbound stamp that only Agent ID (name.ai) holders on BNB Chain can claim. One per agent, forever.">
+<style>
+  :root { --bg:#0b0e11; --card:#161a1e; --line:#2b3138; --gold:#f0b90b; --text:#eaecef; --muted:#848e9c; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  main { max-width: 640px; margin: 0 auto; padding: 32px 20px 64px; }
+  .stamp { border:3px solid var(--gold); border-radius:18px; padding:28px 20px; text-align:center; margin-bottom:24px; }
+  .stamp h1 { margin:0 0 6px; color:var(--gold); font-size:30px; letter-spacing:2px; }
+  .stamp .num { font-size:64px; margin:8px 0; }
+  .stamp p { color:var(--muted); margin:4px 0; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px; margin-bottom:16px; }
+  .card h2 { margin:0 0 10px; font-size:17px; }
+  .card p, .card li { color:var(--muted); line-height:1.55; font-size:14px; }
+  button { width:100%; padding:14px; font:inherit; font-size:16px; font-weight:700; border:0; border-radius:10px; background:var(--gold); color:#0b0e11; cursor:pointer; }
+  button[disabled] { background:var(--line); color:var(--muted); cursor:default; }
+  #status { min-height:22px; text-align:center; margin-top:12px; font-size:14px; }
+  a { color:var(--gold); }
+  .row { display:flex; justify-content:space-between; gap:12px; font-size:14px; padding:6px 0; border-bottom:1px dashed var(--line); }
+  .row:last-child { border-bottom:0; }
+  .row b { color:var(--text); font-weight:600; text-align:right; word-break:break-all; }
+  footer { color:var(--muted); font-size:12px; text-align:center; margin-top:28px; line-height:1.6; }
+</style>
+</head>
+<body>
+<main>
+  <div class="stamp">
+    <h1>AGENT STAMP</h1>
+    <div class="num" id="counter">…</div>
+    <p>agents stamped so far</p>
+    <p>Verified Agent ID holders · BNB Chain</p>
+  </div>
+
+  <div class="card">
+    <h2>Claim your stamp</h2>
+    <p>One free stamp per Agent ID. If your wallet holds an Agent ID (a
+       <b>name.ai</b> identity), you can claim. The stamp is soulbound — it
+       cannot be transferred or sold. It is a proof that you were an agent.</p>
+    <button id="action" disabled>Loading…</button>
+    <div id="status"></div>
+  </div>
+
+  <div class="card">
+    <h2>How it works</h2>
+    <ul>
+      <li>The contract checks the official Agent ID contract on-chain: <i>does this wallet hold an Agent ID right now?</i></li>
+      <li>Holders claim once. Non-holders are rejected by the contract itself — no allowlist, no server, no admin.</li>
+      <li>Artwork and metadata live fully on-chain (SVG). No IPFS, no backend.</li>
+      <li>No fees, no approvals, no owner keys. The contract can never take or move your assets.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>On-chain</h2>
+    <div class="row"><span>Agent Stamp contract</span><b id="caddr">—</b></div>
+    <div class="row"><span>Agent ID contract</span><b>0x60b9262456de011f7d15a54cdd8c48baaa8b022f</b></div>
+    <div class="row"><span>Network</span><b>BNB Chain (56)</b></div>
+    <div class="row"><span>Source code</span><b><a id="srclink" href="#" target="_blank" rel="noopener">verified on BscScan</a></b></div>
+  </div>
+
+  <footer>
+    Agent Stamp is an independent community project built for the Agent ID Hackathon.<br>
+    It is not affiliated with Binance. Never enter a seed phrase or private key on any website — this site never asks for one.
+  </footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+<script>
+const CONFIG = {
+  // Filled in at deployment time.
+  CONTRACT_ADDRESS: "0x0000000000000000000000000000000000000000",
+  AGENT_ID_ADDRESS: "0x60b9262456de011f7d15a54cdd8c48baaa8b022f",
+  CHAIN_ID: 56,
+  READ_RPC: "https://bsc-dataseed.binance.org"
+};
+const STAMP_ABI = [
+  "function totalStamped() view returns (uint256)",
+  "function hasStamped(address) view returns (bool)",
+  "function stampOf(address) view returns (uint256)",
+  "function isAgent(address) view returns (bool)",
+  "function claim() returns (uint256)"
+];
+const btn = document.getElementById("action");
+const statusEl = document.getElementById("status");
+const counterEl = document.getElementById("counter");
+document.getElementById("caddr").textContent = CONFIG.CONTRACT_ADDRESS;
+document.getElementById("srclink").href = "https://bscscan.com/address/" + CONFIG.CONTRACT_ADDRESS + "#code";
+
+let account = null, stampRead = null, stampWrite = null;
+
+function setStatus(msg) { statusEl.textContent = msg; }
+
+async function refreshCounter() {
+  try {
+    const provider = new ethers.JsonRpcProvider(CONFIG.READ_RPC);
+    const c = new ethers.Contract(CONFIG.CONTRACT_ADDRESS, STAMP_ABI, provider);
+    const total = await c.totalStamped();
+    counterEl.textContent = "#" + total.toString();
+  } catch (e) { counterEl.textContent = "—"; }
+}
+
+async function refreshState() {
+  if (!account) {
+    btn.disabled = false; btn.textContent = "Connect wallet";
+    setStatus("Open this page in your wallet's browser, then connect.");
+    return;
+  }
+  btn.disabled = true; btn.textContent = "Checking…";
+  try {
+    const agent = await stampRead.isAgent(account);
+    const claimed = await stampRead.hasStamped(account);
+    if (!agent) {
+      btn.textContent = "No Agent ID found";
+      setStatus("This wallet holds no Agent ID (name.ai), so it cannot claim. Agent IDs are claimed inside the Binance app.");
+    } else if (claimed) {
+      const id = await stampRead.stampOf(account);
+      btn.textContent = "You hold stamp #" + id.toString();
+      setStatus("Already claimed — one stamp per agent, forever.");
+    } else {
+      btn.disabled = false; btn.textContent = "Claim my stamp — free";
+      setStatus("Agent ID verified on-chain. You can claim.");
+    }
+  } catch (e) {
+    btn.textContent = "Retry"; btn.disabled = false;
+    setStatus("Could not read the contract. Check your connection and retry.");
+  }
+}
+
+async function connect() {
+  if (!window.ethereum) {
+    setStatus("No wallet found. Open this page inside the Binance Wallet app browser.");
+    return;
+  }
+  const provider = new ethers.BrowserProvider(window.ethereum);
+  const net = await provider.getNetwork();
+  if (Number(net.chainId) !== CONFIG.CHAIN_ID) {
+    try {
+      await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x38" }] });
+    } catch (e) { setStatus("Please switch your wallet to BNB Chain."); return; }
+  }
+  const signer = await provider.getSigner();
+  account = await signer.getAddress();
+  stampRead = new ethers.Contract(CONFIG.CONTRACT_ADDRESS, STAMP_ABI, provider);
+  stampWrite = new ethers.Contract(CONFIG.CONTRACT_ADDRESS, STAMP_ABI, signer);
+  await refreshState();
+}
+
+async function claim() {
+  btn.disabled = true; btn.textContent = "Confirm in your wallet…";
+  try {
+    const tx = await stampWrite.claim();
+    setStatus("Transaction sent — waiting for confirmation…");
+    await tx.wait();
+    setStatus("Stamped! Welcome, agent.");
+    await refreshCounter();
+    await refreshState();
+  } catch (e) {
+    setStatus("Claim failed or was rejected in the wallet.");
+    await refreshState();
+  }
+}
+
+btn.addEventListener("click", async () => { account ? claim() : connect(); });
+refreshCounter();
+refreshState();
+</script>
+</body>
+</html>

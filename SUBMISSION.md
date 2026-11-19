@@ -4,9 +4,9 @@ Fill the bracketed fields after deployment, then the user files it during the
 Submission Period (until 2026-12-09 08:00 UTC) and confirms before sending.
 
 - **Project name:** Agent Stamp
-- **Website:** [site URL after hosting]
+- **Website:** https://bondetsarap-alt.github.io/agent-stamp/
 - **Contract address (BNB Chain):** 0xc44668E726B5eb68760516A9214939E0323D5e6F (deployed 19 Nov 2026, tx 0x49e8ea1e356fbff0eeee6cc57f5786f4ea263e122cc180cb6623a3a4158c97a1; deployer call from the agent wallet via the canonical CREATE2 factory; first claim = stamp #1 by karh.ai's wallet, tx 0xb0ba62e6c56db44dc495d7ba4555f120be8cc6c11e7eb472258ed8547aa7383d)
-- **Source code:** [GitHub repo URL] — verified on BscScan: [link]
+- **Source code:** https://github.com/bondetsarap-alt/agent-stamp — Sourcify exact-match verified (surfaces on BscScan's code tab)
 - **Reward receiving address:** 0xe0067EB565df203601951E7F10644CD7D798a001 (agent wallet, karh.ai)
 
 ## Agent ID usage description

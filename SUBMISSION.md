@@ -3,6 +3,13 @@
 Fill the bracketed fields after deployment, then the user files it during the
 Submission Period (until 2026-12-09 08:00 UTC) and confirms before sending.
 
+**Channel hunt (19 Nov 2026):** no public web form exists. The announcement
+links only the Promotion survey (app.binance.com/uni-qr/user-survey/
+ff6832f8d2984af289068c9450a3c98c — that one is for X-post links, needs a
+Binance login). The project submission is most likely inside the Binance app
+(Wallet campaign page for the hackathon) — user to open it and screenshot the
+form; all fields below are ready to paste.
+
 - **Project name:** Agent Stamp
 - **Website:** https://bondetsarap-alt.github.io/agent-stamp/
 - **Contract address (BNB Chain):** 0xc44668E726B5eb68760516A9214939E0323D5e6F (deployed 19 Nov 2026, tx 0x49e8ea1e356fbff0eeee6cc57f5786f4ea263e122cc180cb6623a3a4158c97a1; deployer call from the agent wallet via the canonical CREATE2 factory; first claim = stamp #1 by karh.ai's wallet, tx 0xb0ba62e6c56db44dc495d7ba4555f120be8cc6c11e7eb472258ed8547aa7383d)
@@ -53,16 +60,19 @@ Post from @Bonbondd_ after the site is live; then submit the post link via
 the official campaign survey. Hashtags required: #BinanceWalletHackathon
 #AgenticWallet
 
-> Every agent needs a stamp. 🛂
->
-> I built Agent Stamp for the Agent ID Hackathon: a free, soulbound stamp
-> that ONLY Agent ID (name.ai) holders can claim — enforced on-chain by the
-> Agent ID contract itself. No allowlist, no server, no admin keys.
->
-> One per agent. Yours is waiting: [site URL]
->
-> Holders: claim yours and reply with your stamp number.
+> Agent Stamp is live 🛂
+> A free soulbound stamp only Agent ID holders can claim — checked on-chain. No fees, no approvals, no owner.
+> Holders: claim & reply your stamp number.
+> Claim: https://bondetsarap-alt.github.io/agent-stamp/
 > #BinanceWalletHackathon #AgenticWallet
+
+(Short version fits the 280-char limit of the user's unverified X account —
+confirmed 19 Nov; the earlier long draft didn't fit.)
+
+**POSTED 19 Nov 2026 ±14:47 WIB:** https://x.com/Bonbondd_/status/2123322216599441822
+Note: the post's Claim link points at the GitHub repo (which links onward to
+the site) instead of the site directly — fixed by a self-reply with the site
+link. Next: file this post link via the campaign survey (Promotion award).
 
 (Reminder: the promotion award is judged on post quality; never promise
 returns in any post — prohibited by the campaign rules.)
